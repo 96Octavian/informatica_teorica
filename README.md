@@ -1,2 +1,2 @@
-# informatica_teorica
+# Informatica Teorica
 Appunti del corso di Informatica Terorica tenuto dal professor Carlo Mereghetti, AA 2021/2022
