@@ -820,7 +820,7 @@ Assumendo di poter riconoscere il lunguaggio $L_{\text{PARI}}$ dei numeri pari i
 Una classe di complessità è un insieme di problemi che sono risolti entro gli stessi limiti di una o più risorse computazionali:  
 $$\text{DTIME}(f(n)) = \{\text{linguaggi che vengono accettati da DTM in tempo deterministico } O(f(n))\}$$
 Possiamo allo stesso modo definire la classe di funzioni calcolate in tempo $f(n)$ come le funzioni risolte da una macchina di Turing deterministica in $O(f(n))$:  
-$$\text{FTIME}(f(n)) = \{\text{funzioni (problemi) calcolati (risolti) da DTM in tempo deterministico } O(f(n))\}$$
+$$\text{FTIME}(f(n)) = \{\text{funzioni (problemi) calcolate (risolti) da DTM in tempo deterministico } O(f(n))\}$$
 ## $P$ ed $FP$
 $$P = \bigcup_{k \ge 0} \text{DTIME}(n^k) = \{\text{linguaggi accettati da DTM in tempo polinomiale}\}$$
 $$FP = \bigcup_{k \ge 0} \text{FTIME}(n^k) = \{\text{funzioni calcolate da DTM in tempo polinomiale}\}$$
@@ -828,7 +828,7 @@ Raccolgono quei problemi che vengono considerati risolti in tempo efficiente.
 
 ## Proprietà composizionale
 Poniamo che una procedura $P$ sia composta da una prima procedura $p(x)$ il cui output $y$ è riproposto in input alla procedura $q(y)$; supponiamo anche che $p, q = O(n^k)$.  
-Allora possiamo dire che $t_P(n) = t_p(n) + t_q(|y|)$, ossia la complessità di $q$ diepnde dalla lunqhezza di $y$. Ma $y$ è generato da $p$ in un numero $p(x)$ di passi, quindi deve essere $|y| \le p(n) = O(n^k)$. Possiamo concludere che $t_P(n) = p(n) + t_q(|y|) \le p(n) + q(p(n))$ che sono entrambe quantità polinomiali.  
+Allora possiamo dire che $t_P(n) = t_p(n) + t_q(|y|)$, ossia la complessità di $q$ dipende dalla lunqhezza di $y$. Ma $y$ è generato da $p$ in un numero $p(x)$ di passi, quindi deve essere $|y| \le p(n) = O(n^k)$. Possiamo concludere che $t_P(n) = p(n) + t_q(|y|) \le p(n) + q(p(n))$ che sono entrambe quantità polinomiali.  
 Programmi efficienti in tempo che richiamano routine efficienti in tempo rimangono efficienti in tempo.  
 
 ## "Robustezza" dell'efficienza
@@ -870,12 +870,12 @@ Allo stesso modo possiamo dire che
 - il problema di decisione $\pi$ è risolvibile in spazio $f(n)$ se e solo se il linguaggio $L_\pi = \{cod(x): p(x)\}$ è riconosciuto in spazio $f(n)$.  
 
 # Classi di complessità
-$$\text{DSPACE}(f(n)) = \{\text{linguaggi che vengono accettati da DTM in spazio deterministico } O(f(n))\}$$
-$$\text{FSPACE}(f(n)) = \{\text{funzioni (problemi) calcolati (risolti) da DTM in spazio deterministico } O(f(n))\}$$
+$$\text{DSPACE}(f(n)) = \{\text{linguaggi accettati da DTM in spazio deterministico } O(f(n))\}$$
+$$\text{FSPACE}(f(n)) = \{\text{funzioni (problemi) calcolate (risolti) da DTM in spazio deterministico } O(f(n))\}$$
 
 ## $L$ ed $FL$
-$$L = \bigcup_{k \ge 0} \text{DSPACE}(log\ n) = \{\text{linguaggi accettati da DTM in spazio logaritmico}\}$$
-$$FL = \bigcup_{k \ge 0} \text{FSPACE}(log\ n) = \{\text{funzioni calcolate da DTM in spazio logaritmico}\}$$
+$$L = \text{DSPACE}(log\ n) = \{\text{linguaggi accettati da DTM in spazio logaritmico}\}$$
+$$FL = \text{FSPACE}(log\ n) = \{\text{funzioni calcolate da DTM in spazio logaritmico}\}$$
 Raccolgono quei problemi che vengono considerati risolti in spazio efficiente.  
 
 ## Proprietà composizionale
@@ -897,7 +897,7 @@ Problemi in $FL$:
 - aritmetica modulare;
 - $\dots$
 
-Un problema in $L$ o in $FL$ è anche efficientemente parallelizzabile; al momento non esistono compilatori perfettamente parallelizzabili
+Un problema in $L$ o in $FL$ è anche efficientemente parallelizzabile; al momento non esistono compilatori perfettamente parallelizzabili.
 
 ## Tempo _vs_ spazio
 Spesso tempo e spazio sono richieste contrastanti e si lavora molto sul trade-off tra le due: esiste una qualche implicazione tra limiti temporali e spaziali e viceversa?  
@@ -910,14 +910,14 @@ Questo implica che efficienza temporale non porta necessariamente ad efficienza 
 
 Si può in qualche modo mostrare che anche $\text{DSPACE}(f(n)) \subseteq \text{DTIME}(f(n))$?  
 Consideriamo un lingiaggio $L \in \text{DSPACE}(f(n))$: questo significa che esiste una DTM M che riconosce $L$ in spazio $s(n) = O(f(n))$.  
-La computazione di M è quindi una sequenza di configurazioni, ma quanto lunga? Può essere al massimo lunga tanto quante le configurazioni possibili di M, se fosse più lunga (pre il principio della piccionaia) vorrebbe dire che siamo rientrati in una configurazione già visitata, quindi abbiamo trovato un loop: tanto vale rifiutare.  
+La computazione di M è quindi una sequenza di configurazioni, ma quanto lunga? Può essere al massimo lunga tanto quante le configurazioni possibili di M, se fosse più lunga (per il principio della piccionaia) vorrebbe dire che siamo rientrati in una configurazione già visitata, quindi abbiamo trovato un loop: tanto vale rifiutare.  
 Una macchina che risolve un problema in spazio $O(f(n))$ quindi si arresta dopo un numero di passi pari al numero di configurazioni che M può assumere su input di lunghezza $n$:  
 - numero di stati: $|Q|$;
 - posizioni sul nastro di input: $n + 2$;
 - posizioni sul nastro di lavoro: $s(n) + 1 = \alpha f(n) + 1$;
 - contenuto sul nastro di lavoro: $|\Gamma|^{s(n)}$.  
 
-In input possiamo trovarci su uno dei caratteri di input o sui due terminatori; similmente, sul nastro di lavoro possiamo trovarci in una delle $s(n)$ celle sporcate o nel BLANK; il contenuto del nastro di lavoro è una stringa appartenente a $\Gamma$ e ce ne sarebbero infinite, ma possiam limitarci a quelle di lunghezza $s(n)$.  
+In input possiamo trovarci su uno dei caratteri di input o sui due terminatori; similmente, sul nastro di lavoro possiamo trovarci in una delle $s(n)$ celle sporcate o nel BLANK; il contenuto del nastro di lavoro è una stringa appartenente a $\Gamma$ e ce ne sarebbero infinite, ma possiamo limitarci a quelle di lunghezza $s(n)$.  
 Eseguendo vari conti:  
 $$\begin{gathered}
 t(n) \le |Q| \cdot (n+2) \cdot (\alpha f(n)+1) \cdot |\Gamma|^{\alpha f(n)} \le \\
@@ -957,7 +957,7 @@ Un algoritmo non deterministico, per essere corretto, deve dare risposta corrett
 ### Formalizzazione di un modello di calcolo nondeterministico
 Definiamo una macchina di Turing nondeterministica per questi algoritmi.  
 La struttura di una NDTM è la stessa di una DTM, se non per l'aggiunta di un "modulo congetturale" il cui compito è scrivere sulla parte sinistra del nastro (che ora è biinfinito) tutte le strutture magicamente generate che rappresentano i vari universi in cui verranno eseguite le computazioni deterministiche.  
-La fase congetturale rimane "magica" quindi senza costo, mentre la fase di verifica lavora su $(\gamma, x)$, con $\gamma \in \Gamma^*$ struttura per il nondeterminismo e $x$ input del problema; la NDTM accetta $x \in \Sigma^*$ se e solo se $\exists \gamma \in \Gamma^*$ tale che $(\gamma, x)$ viene deterministicamente accettata.  
+La fase congetturale rimane "magica" e quindi senza costo, mentre la fase di verifica lavora su $(\gamma, x)$, con $\gamma \in \Gamma^*$ struttura per il nondeterminismo e $x$ input del problema; la NDTM accetta $x \in \Sigma^*$ se e solo se $\exists \gamma \in \Gamma^*$ tale che $(\gamma, x)$ viene deterministicamente accettata.  
 
 ### Riconoscimento di linguaggio e soluzione di problemi di decisione
 Analogamente al modello deterministico, possiamo semplicemente dire che:
@@ -1023,12 +1023,12 @@ Se $\pi \in NP\text{-C}$ ogni altro problema in $NP$ si riduce polinomialmente a
 
 ## Ancora su relazioni tra complessità spaziali e temporali
 Ricordiamo che $L = \text{DSPACE}(log\ n)$ e $P=\bigcup_{k\ge 0} \text{DTIME}(n^k)$ sono le classi dei problemi risolti efficientemente rispettivamente in spazio e in tempo. Abbiamo potuto dimostrare che $L \subseteq P$, ovvero che una soluzione temporalmente efficiente porta ad una soluzione spazialmente efficiente.  
-Per provare il verso opposto dell'inclusione ci muoviamo in manera analoga a quanto appena fatto: selezioniamo dei problemi $\pi \in L$ che siano difficili, ovvero che risolti questi tutti gli altri troveranno automaticamente una soluzione efficiente.  
+Per provare il verso opposto dell'inclusione ci muoviamo in maniera analoga a quanto appena fatto: selezioniamo dei problemi $\pi \in L$ che siano difficili, ovvero che risolti questi tutti gli altri troveranno automaticamente una soluzione efficiente.  
 ### Gerarchia in $L$
 Per dimostrare che $P \subseteq L$ (e quindi di conseguenza $P = L$) potrei prendere ogni problema in $P$ e trovarne una soluzione in $P$ efficiente in spazio. Ciò è impossibile in quanto i problemi in $P$ sono infiniti: per questo si procede coi seguenti passi.  
 1. Stabilisco una _relazione di difficoltà_  tra problemi in $P$: dati $\pi_1, \pi_2 \in P$, $\pi_1 \le \pi_2$ significa che trovare una soluzione efficiente per $\pi_2$ porta automaticamente ad una soluzione efficiente per $\pi_1$, ovvero $\pi_1$ non è più difficile di $\pi_2$.  
 2. Trovo i problemi più difficili in $P$: $\pi$ è più difficile in $P$ se $\pi \in P \wedge \forall \tilde{\pi} \in P: \tilde{\pi} \le \pi$.  
-3. Restringo la ricerca di algoritmi efficienti ai soli problemi difficili di $NP$.  
+3. Restringo la ricerca di algoritmi efficienti ai soli problemi difficili di $P$.  
 
 ### Riduzione logaritmica
 Dati due linguaggi $L_1, L_2 \subseteq \Sigma^*$ diciamo che $L_1$ si log-space riduce ad $L_2$, e scriviamo $L_1 \le_l L_2$, se e solo se esiste $f: \Sigma^* \to \Sigma^*$ tale che:
@@ -1047,9 +1047,9 @@ Un problema di decisione $\pi$ è $P$-completo se e solo se:
 1. $\pi \in P$;
 2. $\forall \tilde{\pi} \in P: \tilde{\pi} \le_l \pi$.  
 
-Teorema: sia $\pi \in P\text{-C}$ e $\pi \in L$. Allora $P \subseteq $ ($L=P$).  
+Teorema: sia $\pi \in P\text{-C}$ e $\pi \in L$. Allora $P \subseteq L$ ($L=P$).  
 Dimostrazione.  
-Se $\pi \in P\text{-C}$ ogni altro problema in $P$ si log-riduce a $\pi$. Ma assumendo che $\pi \in L$ e ricordando che $A \le_l B \wedge B \in L \implies A \in L$ abbiamo che ogni problema in $P$ appartiene a $L$, e possiamo quindi concludere che $L$ ed $P$ coincidono.  
+Se $\pi \in P\text{-C}$ ogni altro problema in $P$ si log-riduce a $\pi$. Ma assumendo che $\pi \in L$ e ricordando che $A \le_l B \wedge B \in L \implies A \in L$ abbiamo che ogni problema in $P$ appartiene a $L$, e possiamo quindi concludere che $L$ e $P$ coincidono.  
 
 #### Dimostrare che un problema è in $P\text{-C}$
 1. Dimostrare che $\pi \in P$;
