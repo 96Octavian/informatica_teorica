@@ -274,7 +274,7 @@ $$[ ]( ): \text{W-COM} \times \text{W-STATI} \to \text{W-STATI}_{\bot}$$
 Nei casi base è semplice definire la funzione stato prossimo: semplicemente restituisce i 21 valori invariati tranne quello indicato nell'assegnamento, che sarà incrementato/decrementato o posto a 0.  
 In un passo composto conosciamo per induzione il comportamento della funzione stato prossimo: non ci resta che applicare iterativamente la funzione stato prossimo ad ogni comando, prendendo come stato iniziale lo stato prossimo del comando precedente.  
 Anche per il comando while conosciamo la funzione stato prossimo per ipotesi induttiva, e ci basta applicare la funzione stato prossimo il minor numero di volte necesario a mandare a 0 il registro di controllo. Lo stato prossimo di un comando while è quindi il risultato dopo queste applicazioni o indefinito se non si può mandare a 0 il registro di controllo.  
-Semantica di $\text{W-PROG}$: $\Psi_w(x) = Pro(0, [w](w-in(x)))$.  
+Semantica di $\text{W-PROG}$: $\Psi_w(x) = Pro_0^{21}([w](w-in(x)))$.  
 
 # Confronto tra sistemi di calcolo
 Vogliamo ora confrontare i due sistemi RAM e WHILE per vedere se possiamo trarre conclusioni interessanti sulla calcolabilità in due sistemi diversi.  
@@ -314,7 +314,7 @@ Comp(x_k := 0) =\ & LP: \text{IF } R_k = 0 \text{ THEN GOTO EX} \\
 &EX: R_k \leftarrow R_k \dot- 1 \\
 \end{aligned}$$
 
-Nel caso di incremento/decremento, se $k = j$ abbiamo una istruzione apposita, quindi consideriamo soo il caso $k \neq j$:  
+Nel caso di incremento/decremento, se $k = j$ abbiamo una istruzione apposita, quindi consideriamo solo il caso $k \neq j$:  
 $$\begin{aligned}
 Comp(x_k := x_j +/\dot- 1) =\ & LP: \text{IF } R_j = 0 \text{ THEN GOTO EX1} \\
 &\quad \quad R_j \leftarrow R_j \dot- 1 \\
@@ -331,7 +331,7 @@ Comp(x_k := x_j +/\dot- 1) =\ & LP: \text{IF } R_j = 0 \text{ THEN GOTO EX1} \\
 &\quad \quad R_k \leftarrow R_k + 1 \\
 &\quad \quad \text{IF } R_{21} = 0 \text{ THEN GOTO EX2} \\
 
-& EX3: R_k \leftrightarrow r_k +/\dot- 1 \\
+& EX3: R_k \leftarrow R_k +/\dot- 1 \\
 \end{aligned}$$
 
 ### Comando composto
@@ -479,18 +479,21 @@ n + 1 & m = 0 \\
 ## Operatore di minimalizzazione di funzioni
 Siccome le funzioni ricorsive primitive ancora non catturano la completezza delle funzioni calcolabili da WHILE (e quindi da RAM), le ampliamo ancora chiudendole rispetto ad un nuovo operatore che prende una funzione e restituisce la funzione minimalizzata.  
 Sia $f: \mathbb{N}^{n+1} \to \mathbb{N}$, $f(\underline{x}, y)$ con $\underline{x} \in \mathbb{N}^n$ e $y \in \mathbb{N}$. Definiamo  
-$$MIN(f(\underline{x}, y)) = g(x) = \begin{cases}
+$$\begin{gathered}
+MIN(f(\underline{x}, y)) = g(x) = \begin{cases}
 y & f(\underline{x}, y) = 0 \wedge \forall t \lt y: f(\underline{x}, t) \neq 0 \\
 \bot & \text{altrimenti} \\
 \end{cases} \\
-\mu y(f(\underline{x}, y) = 0)$$
+\\
+\mu y(f(\underline{x}, y) = 0)
+\end{gathered}$$
 
 ## Funzioni ricorsive parziali
 La classe $\mathbb{P}$ delle _funzioni ricorsive parziali_ amplia RICPRIM chiudendo ELEM rispetto a Comp, RP, e infine MIN: 
 $$\text{ELEM}^{\text{Comp, RP, MIN}} = \mathbb{P} = \{\text{funzioni ricorsive parziali}\}$$
 Sicuramente $\mathbb{P}$, che grazie a MIN contiene anche funzioni parziali, amplia RICPRIM, ma rispetto a $F(\text{WHILE})$?  
 
-### $FRP \subseteq F(\text{WHILE})$
+### $\mathbb{P} \subseteq F(\text{WHILE})$
 Dimostrazione: definiamo induttivamente $\text{ELEM}^{\text{Comp, RP, MIN}} = \mathbb{P}$.  
 1. Le funzioni ELEM sono in $\mathbb{P}$;
 2. $h, g_1, \dots, g_n \in \mathbb{P} \implies COmp(h, g_1, \dots, g_n) \in \mathbb{P}$;
@@ -505,7 +508,7 @@ Il tezo punto si basa ancora sulla dimostrazione precedente quindi è dimostrato
 Manca quindi la dimostrazione del quarto punto, che è l'aggiunta all'insieme delle funzioni ricorsive primitive. Anche questo è facilmente dimostrabile: per ipotesi la funzione $f(\underline{x}, y) \in \mathbb{P}$ e quindi esiste anche un programma while $F$ che calcola quella funzione. Per calcolare MIN ci basta provare tutti gli $y$ partendo dal più piccolo e controllare che il programma $F$ restituisca 0. Se troviamo 0 restituiamo $y$ altrimenti continueremo all'infinito (quindi $\bot$), esattamente come la semantica di MIN.  
 La classe delle funzioni ricorsive parziali è while programmabile.  
 
-### $F(\text{WHILE}) \subseteq FRP$
+### $F(\text{WHILE}) \subseteq \mathbb{P}$
 Per mostrare se l'inclusione è propria o impropria, proviamo a mostrare anche l'altro verso dell'inclusione.  
 Formalmente, la semantica di un programma WHILE è definita come $\Psi_w(x) = Pro_0^{21}([w](w-in(x)))$ dove $[ ]( )$ è la funzione stato prossimo e $w-in()$ è l'inizializzazione.  
 Dato che la proiezione è già inclusa nelle ricorsive parziali e le ricorsive parziali sono chiuse alla composizione, ci basta mostrare che anche l'argomento sia incluso.  
@@ -513,7 +516,7 @@ Tecnicamente, le ricorsive parziali hanno come codominio i naturali mentre la se
 Procediamo ancora passo per passo. L'azzeramento di un registro è esprimibile con funzioni in $\mathbb{P}$:  
 $$f_{x_k := 0}(x) = [Pro(0, x), \dots, 0_k, \dots, Pro(20, x)]$$
 e allo stesso modo l'incremento, decremento:  
-$$f_{x_k := x_j +\dot-1}(x) = [Pro(0, x), \dots, Pro(j, x)+/\dot-1, \dots, Pro(20, x)]$$
+$$f_{x_k := x_j + / \dot-1}(x) = [Pro(0, x), \dots, Pro(j, x)+/\dot-1, \dots, Pro(20, x)]$$
 Induttivamente siamo quindi in grado di esprimere comandi WHILE con funzioni ricorsive parziali, e possiamo facilmente esprimere anche comandi composti, in quanto composizione di comandi base, e l'insieme delle ricorsive parziali è chiuso rispetto alla composizione.  
 Per esprimere un ciclo WHILE, per induzione suppongo di saper scrivere comandi base e composti con funzioni ricorsive parziali, e semplicemente eseguo la funzione contenuta nel ciclo $e(x)$ volte: $f_c^{e(x)}(x)$ con $e(x) = \mu y(Pro(x, f_0^y(x)) = 0) = \mu y(Pro(x, T(x, y)) = 0)$.  
 Da notare che per fare questo mi serve comporre $f_c$ un numero $e(x)$ non costante di volte, che è un'operazione che non so eseguire ad ora: mi serve definire $T(x, y) = f_c^y(x)$ e fare in modo che sia ricorsiva parziale.  
@@ -533,14 +536,14 @@ Vogliamo ora cercare di definire caratteristiche generali che deve avere un sist
 Indichiamo con $\{\varphi_i\}_{i \in \mathbb{N}}$ i sistemi di programmazione.  
 1. $\{\varphi_i\} = \mathbb{P}$: vogliamo che il sistema di programmazione sia coerente con la Tesi di Church-Turing, ovvero che possa calcolare le funzioni ricorsive parziali; 
 2. interprete universale: la presenza di questo programma, in grado di simulare ogni altro programma del sistema di programmazione, permette una _algebra dei programmi_;
-3. validità del teorema $S_1^1$, ovver deve essere possibile costruire automaticamente programmi più specifici a partire da programmi generali.  
+3. validità del teorema $S_1^1$, ovvero deve essere possibile costruire automaticamente programmi più specifici a partire da programmi generali.  
 
 ## Teorema $S_1^1$
 Il programma $S_1^1$ implementa la funzione  
 $$S_1^1(n, y) = \bar{n}: \varphi_{\bar{n}}(x) = \varphi_n(x, y)$$
 Il programma che implementi questo, in linguaggio RAM, semplicemente per ogni input da fissare esegue $n$ incrementi iniziali, dove $n$ è il valore da fissare per l'input, per poi metterlo in coppia di Cantor col resto dell'input in $R_1$, e chiamare poi semplicemente il normale programma $P$.  
 Questa funzione è quindi sia programmabile che totale.  
-Ne consegue il teorema $S_1^1$: dato $\{\varphi_i\} \text{ RAM}$ $\exists S_1^1 \in \mathbb{T}: \forall n, x, y \in \mathbb{N} \varphi_n(<x, y>) = \varphi_{S_1^1(n, y)}(x)$.  
+Ne consegue il teorema $S_1^1$: dato $\{\varphi_i\}$ $$\exists S_1^1 \in \mathbb{T}: \forall n, x, y \in \mathbb{N},\ \varphi_n(<x, y>) = \varphi_{S_1^1(n, y)}(x)$$.  
 
 ## Sistemi di programmazione accettabili - SPA
 Sistemi che soddisfino queste tre caratteristiche sono detti _sistemi di programmazione accettabili_:
@@ -757,7 +760,7 @@ dove:
 - $F \subseteq Q$ sono gli stati finali;
 - $\Sigma$ è l'alfabeto di input per il quale vale $L_M \subseteq \Sigma^*$;
 - $\Gamma$ è l'alfabeto di lavoro per cui vale $\Sigma \subset \Gamma$ dato che deve contenere sicuramente tutti i i simboli dell'alfabeto di input più almeno BLANK;
-- $\delta: Q \times \Gamma \to Q \times (\Gamma \setminus \{BLANK\}) \times \{-1, 0, +1\}$ è la funzione di transizione che definisce le mosse: è una funzione parziale perché non è definita per ogni possibile combinazione di stati e input, nei quali casi la macchina si arresta. Inoltre BLANK può solo essere scritto, non letto.  
+- $\delta: Q \times \Gamma \to Q \times (\Gamma \setminus \{BLANK\}) \times \{-1, 0, +1\}$ è la funzione di transizione che definisce le mosse: è una funzione parziale perché non è definita per ogni possibile combinazione di stati e input, nei quali casi la macchina si arresta. Inoltre BLANK può solo essere letto, non scritto.  
 
 ### Configurazione
 Una fotografia dello stato della macchina in un momento è una tripla che registra lo stato del nastro, la posizione della testina e lo stato del controllore:  
@@ -857,7 +860,7 @@ La complessità in spazio (worst-case) è una funzione $s: \mathbb{N} \to \mathb
 ## DTM a due nastri
 Usando questo modello però avremo sempre, con input $x$, almeno $|x|$ celle occupate del nastro, di conseguenza la complessità spaziale non potrà mai essere sub-lineare.  
 Definiamo quindi un modello di Macchina di Turing a due nastri: nel primo, di sola lettura, viene depositato l'input, circondato da due caratteri che indicano l'inizio e la fine della stringa da leggere; nel secondo, il nastro di lavoro, una seconda testina potrà sia leggere che scrivere, permettendoci di calcolare lo spazio utilizzato senza contare la lettura dell'input.  
-Nella definizione formale di DTM non cambia altro che la definizione dell'alfabeto di input, che include ora i due caratteri di terminazione, e la funzione di transizione, che a differenza di prima deve dare l'indicazione per il movimento di due testine, non più una sola.  
+Nella definizione formale di DTM non cambia altro che la definizione dell'alfabeto di lavoro, che include ora i due caratteri di terminazione, e la funzione di transizione, che a differenza di prima deve dare l'indicazione per il movimento di due testine, non più una sola.  
 Possiamo ulteriormente affinare la definizione di spazio utilizzato aggiungendo anche un nastro di output: questo nastro, di sola scrittura, manterrà il risultato ad esempio del calcolo di una funzione, senza occupare spazio nel nastro di lavoro.  
 
 ## Complessità spaziale di linguaggi, insiemi, decisioni
@@ -909,7 +912,7 @@ Dimostrazione: $L \in \text{DTIME}(f(n)) \implies \exists$ DTM M che riconosce $
 Questo implica che efficienza temporale non porta necessariamente ad efficienza spaziale, perché le risorse rimangono polinomiali (non logaritmiche).  
 
 Si può in qualche modo mostrare che anche $\text{DSPACE}(f(n)) \subseteq \text{DTIME}(f(n))$?  
-Consideriamo un lingiaggio $L \in \text{DSPACE}(f(n))$: questo significa che esiste una DTM M che riconosce $L$ in spazio $s(n) = O(f(n))$.  
+Consideriamo un linguaggio $L \in \text{DSPACE}(f(n))$: questo significa che esiste una DTM M che riconosce $L$ in spazio $s(n) = O(f(n))$.  
 La computazione di M è quindi una sequenza di configurazioni, ma quanto lunga? Può essere al massimo lunga tanto quante le configurazioni possibili di M, se fosse più lunga (per il principio della piccionaia) vorrebbe dire che siamo rientrati in una configurazione già visitata, quindi abbiamo trovato un loop: tanto vale rifiutare.  
 Una macchina che risolve un problema in spazio $O(f(n))$ quindi si arresta dopo un numero di passi pari al numero di configurazioni che M può assumere su input di lunghezza $n$:  
 - numero di stati: $|Q|$;
@@ -961,7 +964,7 @@ La fase congetturale rimane "magica" e quindi senza costo, mentre la fase di ver
 
 ### Riconoscimento di linguaggio e soluzione di problemi di decisione
 Analogamente al modello deterministico, possiamo semplicemente dire che:
-- un lignuaggio $L \subseteq \Sigma^*$ è accettato da un algoritmo nondeterministico se e solo se esiste una NDTM M tale che $L = L_M$;
+- un linguaggio $L \subseteq \Sigma^*$ è accettato da un algoritmo nondeterministico se e solo se esiste una NDTM M tale che $L = L_M$;
 - un algoritmo nondeterministico per la soluzione del problema $\pi$ è una NDTM M tale che $L_\pi = L_M$.  
 
 ### Complessità in tempo
@@ -969,7 +972,7 @@ Le singole computazioni sono normali computazioni deterministiche, quindi possia
 Analogamente un linguaggio è accettato con complessità in tempo nondeterministica $t(n)$ se e solo se esite una NDTM con complessità $t(n)$ che lo accetta.  
 
 ### Classi di complessità nondeterministiche
-$$\text{NTIME}(f(n))=\{\text{linguaggi (o problemi di decisione) accettati (o risolti) con complessità nondeterministica}\ O(f(n))\}$$
+$$\text{NTIME}(f(n))=\{\text{linguaggi (problemi di decisione) accettati (risolti) con complessità nondeterministica}\ O(f(n))\}$$
 Definiamo inoltre la classe dei problemi efficientemente verificabili nondeterministicamente:  
 $$NP = \bigcup_{k \ge 0} \text{NTIME}(n^k) = \{\text{problemi di decisione che ammettono algoritmi nondeterministici polinomiali (efficienti)}\}$$
 
@@ -1024,7 +1027,7 @@ Se $\pi \in NP\text{-C}$ ogni altro problema in $NP$ si riduce polinomialmente a
 ## Ancora su relazioni tra complessità spaziali e temporali
 Ricordiamo che $L = \text{DSPACE}(log\ n)$ e $P=\bigcup_{k\ge 0} \text{DTIME}(n^k)$ sono le classi dei problemi risolti efficientemente rispettivamente in spazio e in tempo. Abbiamo potuto dimostrare che $L \subseteq P$, ovvero che una soluzione temporalmente efficiente porta ad una soluzione spazialmente efficiente.  
 Per provare il verso opposto dell'inclusione ci muoviamo in maniera analoga a quanto appena fatto: selezioniamo dei problemi $\pi \in L$ che siano difficili, ovvero che risolti questi tutti gli altri troveranno automaticamente una soluzione efficiente.  
-### Gerarchia in $L$
+### Gerarchia in $P$
 Per dimostrare che $P \subseteq L$ (e quindi di conseguenza $P = L$) potrei prendere ogni problema in $P$ e trovarne una soluzione in $P$ efficiente in spazio. Ciò è impossibile in quanto i problemi in $P$ sono infiniti: per questo si procede coi seguenti passi.  
 1. Stabilisco una _relazione di difficoltà_  tra problemi in $P$: dati $\pi_1, \pi_2 \in P$, $\pi_1 \le \pi_2$ significa che trovare una soluzione efficiente per $\pi_2$ porta automaticamente ad una soluzione efficiente per $\pi_1$, ovvero $\pi_1$ non è più difficile di $\pi_2$.  
 2. Trovo i problemi più difficili in $P$: $\pi$ è più difficile in $P$ se $\pi \in P \wedge \forall \tilde{\pi} \in P: \tilde{\pi} \le \pi$.  
