@@ -268,7 +268,7 @@ La semantica di un programma while su dato $n$ è l'output contenuto nel registr
 A differenza della RAM, che aveva infiniti stati, non abbiamo bisogno di definire una funzione di stato: qui basta una lista di 21 elementi contenente il valore dei registri. Lo spazio degli stati è quindi $\mathbb{N}^{21}$, e uno stato $\underline{x}$ è $\underline{x} \in \mathbb{N}^{21}$ e l'inizializzazione semplicemente imposta a 0 tutti i registri tranne $x_1$ di input.  
 
 ### Funzione stato prossimo
-$$[ ]( ): \text{W-COM} \times \text{W-STATI} \to \text{W-STATI}_{\bot}$$
+$$[\ ](\ ): \text{W-COM} \times \text{W-STATI} \to \text{W-STATI}_{\bot}$$
 È una funzione che, da un comando, preso in ingresso uno stato, resituisce lo stato prossimo: $[\mathbb{C}](\underline{x}) = \underline{x}'$. Questa funzione può essere definita induttivamente su tutte le strutture induttive del comando $\mathbb{C}$.  
 
 Nei casi base è semplice definire la funzione stato prossimo: semplicemente restituisce i 21 valori invariati tranne quello indicato nell'assegnamento, che sarà incrementato/decrementato o posto a 0.  
@@ -356,7 +356,7 @@ Questa traduzione è programmabile, completa e corretta: ciò significa che è e
 Questo inoltre dimostra che la potenza computazionale di WHILE è inclusa in quella di RAM.  
 
 # Interprete
-Per dimostrare l'altro verso dell'inclusione, e quindi controllare se WHILE è incluso propriamente in RAM o se sono equipotenti, impiegheremo un _interprete_. Un interprete $I$ differisce da un compilatore in quanto è un programma scritto nel linguaggio di destinazione che permette di eseguire una istruzione alla volta del linguaggio di partenza.  
+Per dimostrare l'altro verso dell'inclusione, e quindi controllare se WHILE è incluso propriamente in RAM o se sono equipotenti, impiegheremo un _interprete_. Un interprete $I$ differisce da un compilatore in quanto è un programma scritto nel linguaggio di desInterpretetinazione che permette di eseguire una istruzione alla volta del linguaggio di partenza.  
 ## Macro-while
 Per comodità useremo una versione del WHILE con alcune macro per semplificare la scrittura del codice:  
 - $x_k := x_j + x_i$;
@@ -372,7 +372,11 @@ Per comodità useremo una versione del WHILE con alcune macro per semplificare l
 ## Corrispondenza memoria WHILE - RAM
 Dato che WHILE ha solo 21 variabili mentre RAM ha infiniti registri, dobbiamo in qualche modo mappare i registri nelle 21 variabili.  
 Il primo particolare da notare è che RAM non userà mai veramente infiniti registri: dato che codificheremo programma e dato con Cantor, la macchina RAM non potrà aver usato un registro con indice maggiore del numero restituito dalla codifica di Cantor.  
-In $x_0$ codifichiamo con Cantor i registri della macchina RAM; in $x_1$ terremo il contatore, in $x_2$ il dato su cui lavora $P$, in $x_3$ metteremo la codifica di $P$ e in $x_4$ l'istruzione corrente da eseguire.  
+- $x_0 \leftarrow <R_0, \dots, R_{n+2}>$: in $x_0$ codifichiamo con Cantor i registri della macchina RAM;
+- $x_1 \leftarrow L$: in $x_1$ terremo il contatore;
+- $x_2 \leftarrow x$: in $x_2$ il dato di input su cui lavora $P$;
+- $x_3 \leftarrow cod(P)$: in $x_3$ metteremo la codifica di $P$;
+- $x_4 \leftarrow Istr_L$: in $x_4$ l'istruzione corrente da eseguire.  
 ## Esecuzione
 Per eseguire il programma RAM memorizzato in questi 5 registri semplicemente, dopo aver preparato le variabili, si imposta un ciclo while che dura finché il contatore è diverso da 0 o finchè non è maggiore della lunghezza di $P$; in questo ciclo si esegue il fetch dell'istruzione corrente (cioè si mette in $x_4$ la proiezione dell'elemento contato da $x_1$ del listato del programma) e si confronta il suo modulo 3 per decidere quale istruzione eseguire; a questo punto si può banalmente eseguire una delle 3 istruzioni RAM tradotte in while.  
 
@@ -433,7 +437,7 @@ h(f(\underline{x}, y-1), y-1, \underline{x}) & y \gt 0
 
 Con questo riusciamo ad esprimere ad esempio somma, prodotto e predecessore:
 $$somma(x, y) = \begin{cases}
-x = Pro_1^2(x, y) & y = 0 \\
+x = Pro_0^2(x, y) & y = 0 \\
 successore(somma(x, y-1)) & y \gt 0 \\
 \end{cases}$$
 
@@ -464,7 +468,7 @@ Per dimostrare che ogni funzione in RP è programmabile si procede sempre in man
 3. assumo che $g, h \in\ RICPRIM \subseteq F(\text{WHILE})$ e dimostro che $RP(g, h) \in F(\text{WHILE})$.  
 
 Il primo punto è facile perché riesco facilmente a scrivere programmi per calcolare successivo, identità nulla e proiezione.  
-Per il secondo punto, assumendo di poter programmare le singole funzioni, mi basta mostrare un programma che per ogni funzione $g$ calcoli il suo risultato su $x_1$ e lo codifichi magari con Cantor in $x_0$ assieme al risultato della funzione precedente, e $h$ finale semplicemente opera su questa codifica, quindi mostro un programma while la cui funzione espressa è la composizione delle funzioni: $\Psi_w(\underline{x}) = Comp(h, g_1, \dots, g_n)(\underline{x})$.  
+Per il secondo punto, assumendo (per ipotesi induttiva) di poter programmare le singole funzioni, mi basta mostrare un programma che per ogni funzione $g$ calcoli il suo risultato su $x_1$ e lo codifichi magari con Cantor in $x_0$ assieme al risultato della funzione precedente, e $h$ finale semplicemente opera su questa codifica, quindi mostro un programma while la cui funzione espressa è la composizione delle funzioni: $\Psi_w(\underline{x}) = Comp(h, g_1, \dots, g_n)(\underline{x})$.  
 Per il terzo punto mostriamo che possiamo calcolare tutte le funzioni contenute in RP: semplicemente mostro un programma WHILE che richiama la routine $G(x)$ per cui vale $g = \varphi_G$, salva il risultato in un registro $t$, poi esegue in un ciclo di $k$ iterazioni (fino a che vale $k \le y$) la routine $H$ per cui vale $h = \varphi_H$: $t := H(t, k-1, \underline{x})$.  
 
 Questo ci dimostra che $RP \subset F(\text{WHILE})$. Da notare che l'inclusione è propria in quanto le funzioni ricorsive primitive sono solo totali, mentre le macchine while possono andare in loop e quindi avere risultato indefinito.  
@@ -485,7 +489,7 @@ y & f(\underline{x}, y) = 0 \wedge \forall t \lt y: f(\underline{x}, t) \neq 0 \
 \bot & \text{altrimenti} \\
 \end{cases} \\
 \\
-\mu y(f(\underline{x}, y) = 0)
+= \mu y(f(\underline{x}, y) = 0)
 \end{gathered}$$
 
 ## Funzioni ricorsive parziali
@@ -503,29 +507,29 @@ Dimostrazione: definiamo induttivamente $\text{ELEM}^{\text{Comp, RP, MIN}} = \m
 
 Ora come nella dimostrazione precedente dimostriamo che ogni punto fa parte di $F(\text{WHILE})$.  
 Per il primo punto si parla di $\text{ELEM}$ quindi già le operazioni elementari sono parte di $F(\text{WHILE})$.  
-Per il secondo punto abbiamo che le singole funzioni sono per ipotesi while-programmabili, quindi la loro composizione è anch'essa while-programmabile.  
+Per il secondo punto abbiamo che le singole funzioni sono per ipotesi WHILE-programmabili, quindi la loro composizione è anch'essa WHILE-programmabile.  
 Il tezo punto si basa ancora sulla dimostrazione precedente quindi è dimostrato facilmente.  
-Manca quindi la dimostrazione del quarto punto, che è l'aggiunta all'insieme delle funzioni ricorsive primitive. Anche questo è facilmente dimostrabile: per ipotesi la funzione $f(\underline{x}, y) \in \mathbb{P}$ e quindi esiste anche un programma while $F$ che calcola quella funzione. Per calcolare MIN ci basta provare tutti gli $y$ partendo dal più piccolo e controllare che il programma $F$ restituisca 0. Se troviamo 0 restituiamo $y$ altrimenti continueremo all'infinito (quindi $\bot$), esattamente come la semantica di MIN.  
-La classe delle funzioni ricorsive parziali è while programmabile.  
+Manca quindi la dimostrazione del quarto punto, che è l'aggiunta all'insieme delle funzioni ricorsive primitive. Anche questo è facilmente dimostrabile: per ipotesi la funzione $f(\underline{x}, y) \in \mathbb{P}$ e quindi esiste anche un programma WHILE $F$ che calcola quella funzione. Per calcolare MIN ci basta provare tutti gli $y$ partendo dal più piccolo e controllare che il programma $F$ restituisca 0. Se troviamo 0 restituiamo $y$ altrimenti continueremo all'infinito (quindi $\bot$), esattamente come la semantica di MIN.  
+La classe delle funzioni ricorsive parziali è WHILE-programmabile.  
 
 ### $F(\text{WHILE}) \subseteq \mathbb{P}$
 Per mostrare se l'inclusione è propria o impropria, proviamo a mostrare anche l'altro verso dell'inclusione.  
-Formalmente, la semantica di un programma WHILE è definita come $\Psi_w(x) = Pro_0^{21}([w](w-in(x)))$ dove $[ ]( )$ è la funzione stato prossimo e $w-in()$ è l'inizializzazione.  
+Formalmente, la semantica di un programma WHILE è definita come $\Psi_w(x) = Pro_0^{21}([w](w-in(x)))$ dove $[\ ](\ )$ è la funzione stato prossimo e $w-in()$ è l'inizializzazione.  
 Dato che la proiezione è già inclusa nelle ricorsive parziali e le ricorsive parziali sono chiuse alla composizione, ci basta mostrare che anche l'argomento sia incluso.  
-Tecnicamente, le ricorsive parziali hanno come codominio i naturali mentre la semantica della funzione stato prossimo ha come codominio un vettore di 21 componenti: passeremo quindi dai vettori ai naturali utilizzando la codifica fornita dalla coppia di Cantor: mostreremo che $f_c(x) \in \mathbb{P}$ con $x = [\underline{x}]$ e $y = [\underline{y}]$.  
+Tecnicamente, le ricorsive parziali hanno come codominio i naturali mentre la semantica della funzione stato prossimo ha come codominio un vettore di 21 componenti: passeremo quindi dai vettori ai naturali utilizzando la codifica fornita dalla coppia di Cantor, ovvero mostreremo che $f_c(x) = y \in \mathbb{P}$ con $x = [\underline{x}]$ e $y = [\underline{y}]$ dove $[\ ]$ è la codifica di Cantor di vettori di dimensione fissa.  
 Procediamo ancora passo per passo. L'azzeramento di un registro è esprimibile con funzioni in $\mathbb{P}$:  
 $$f_{x_k := 0}(x) = [Pro(0, x), \dots, 0_k, \dots, Pro(20, x)]$$
 e allo stesso modo l'incremento, decremento:  
 $$f_{x_k := x_j + / \dot-1}(x) = [Pro(0, x), \dots, Pro(j, x)+/\dot-1, \dots, Pro(20, x)]$$
 Induttivamente siamo quindi in grado di esprimere comandi WHILE con funzioni ricorsive parziali, e possiamo facilmente esprimere anche comandi composti, in quanto composizione di comandi base, e l'insieme delle ricorsive parziali è chiuso rispetto alla composizione.  
-Per esprimere un ciclo WHILE, per induzione suppongo di saper scrivere comandi base e composti con funzioni ricorsive parziali, e semplicemente eseguo la funzione contenuta nel ciclo $e(x)$ volte: $f_c^{e(x)}(x)$ con $e(x) = \mu y(Pro(x, f_0^y(x)) = 0) = \mu y(Pro(x, T(x, y)) = 0)$.  
+Per esprimere un ciclo WHILE, per induzione suppongo di saper scrivere comandi base e composti con funzioni ricorsive parziali, e semplicemente eseguo la funzione contenuta nel ciclo $e(x)$ volte: $f_c^{e(x)}(x)$ con $e(x) = \mu y(Pro(x, f_c^y(x)) = 0) = \mu y(Pro(x, T(x, y)) = 0)$.  
 Da notare che per fare questo mi serve comporre $f_c$ un numero $e(x)$ non costante di volte, che è un'operazione che non so eseguire ad ora: mi serve definire $T(x, y) = f_c^y(x)$ e fare in modo che sia ricorsiva parziale.  
 Questa funzione $T$ è definita così:  
 $$T(x, y) = \begin{cases}
 x & y = 0 \\
 f_c(T(x, y-1)) & y \gt 0 \\
 \end{cases}$$
-Questa funzione $T$ è sostanzialmente una minimalizzazione di una funzione ricorsiva parziale, quindi è anch'essa ricorsiva parziale.  
+Questa funzione $T$ è sostanzialmente una minimalizzazione di una funzione ricorsiva parziale, quindi è anch'essa ricorsiva parziale $f_{c'}(x) = f_c^{e(x)}(x) = T(x, e(x)) \in \mathbb{P}$.  
 In questo modo abbiamo mostrato che tutti i comandi WHILE sono esprimibili tramite funzioni ricorsive parziali, dimostrando quindi il secondo verso dell'inclusione: $F(\text{WHILE}) \subseteq FRP$
 
 ## Conclusioni e Tesi di Church-Turing
@@ -606,7 +610,7 @@ Problemi sui grafi:
 
 
 ## Problema dell'arresto
-$AR_p$ indica il problema dell'arresto per il programma p, ovvero chiede se il programma termina per qualsiasi input: è equivalente a chiedersi se una funzione è totale, ovvero se $\forall x \in \mathbb{N} \varphi_p(x)\downarrow$.  
+$AR_p$ indica il problema dell'arresto per il programma $p$, ovvero chiede se il programma termina per qualsiasi input: è equivalente a chiedersi se una funzione è totale, ovvero se $\forall x \in \mathbb{N}\ \varphi_p(x)\downarrow$.  
 Per alcuni programmi, per i quali riesco a trovare la funzione calcolata, il problema è decibile.  
 Invece ad esempio, facendo eseguire all'interprete universale un programma su se stesso abbiamo un programma indecibile, in quanto non solo il dato ma anche il programma non è fissato.  
 Lo dimostriamo per assurdo: assumiamo $AR_{\hat{p}}$ decidibile. Dunque la funzione  
