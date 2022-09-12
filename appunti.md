@@ -289,7 +289,7 @@ In altre parole, per ogni programma del primo sistema ne esiste uno equivalente 
 Tutto questo si può provare trovando un _compilatore_ tra il primo e il secondo linguaggio.  
 
 ## Compilatore
-In matematia la compilazione si chiama "traduzione".  
+In matematica la compilazione si chiama "traduzione".  
 Dati i sistemi $\mathbb{C}_1$ e $\mathbb{C}_2$, una traduzione tra i due è una funzione 
 $$T: \text{$\mathbb{C}_1$-PROG} \to \text{$\mathbb{C}_2$-PROG}$$
 tale che:
@@ -356,7 +356,7 @@ Questa traduzione è programmabile, completa e corretta: ciò significa che è e
 Questo inoltre dimostra che la potenza computazionale di WHILE è inclusa in quella di RAM.  
 
 # Interprete
-Per dimostrare l'altro verso dell'inclusione, e quindi controllare se WHILE è incluso propriamente in RAM o se sono equipotenti, impiegheremo un _interprete_. Un interprete $I$ differisce da un compilatore in quanto è un programma scritto nel linguaggio di desInterpretetinazione che permette di eseguire una istruzione alla volta del linguaggio di partenza.  
+Per dimostrare l'altro verso dell'inclusione, e quindi controllare se WHILE è incluso propriamente in RAM o se sono equipotenti, impiegheremo un _interprete_. Un interprete $I$ differisce da un compilatore in quanto è un programma scritto nel linguaggio di destinazione che permette di eseguire una istruzione alla volta del linguaggio di partenza.  
 ## Macro-while
 Per comodità useremo una versione del WHILE con alcune macro per semplificare la scrittura del codice:  
 - $x_k := x_j + x_i$;
@@ -572,7 +572,7 @@ In parole povere, considerando $t$ come una funzione che manipola funzioni, esis
 ### Dimostrazione
 Consideriamo una funzione $h$: possiamo, applicando il teorema $S_1^1$, specializzarla con la funzione $s_1^1(h, h)$, e a questa specializzazine applicare una trasformazione $t$.  
 A questo punto, essendo $t$ una composizione di funzioni totali, sappiamo che esiste una funzione che calcola $t$, ovvero una funzione implementata dal programma $m$ la cui semantica è come segue: $\varphi_m(h) = \varphi_{t(s_1^1(h, h))}$.  
-Diciamo ora che $n$ è il programma che implementa queta specializzazione: $n = s_1^1(m, m)$, e costruiamo la seguente catena di uguaglianze:  
+Diciamo ora che $n$ è il programma che implementa questa specializzazione: $n = s_1^1(m, m)$, e costruiamo la seguente catena di uguaglianze:  
 $$\varphi_n = \varphi_{s_1^1(m, m)} = \varphi_m(m) = \varphi_{t(s_1^1(m, m))} = \varphi_{t(n)}$$
 Questa catena ci porta chiaramente a concludere che $n = t(n)$, ovvero, in accordo con la tesi del teorema, che $\varphi_n = \varphi_{t(n)}$.  
 
@@ -603,6 +603,7 @@ Un problema $\pi$ è decidibile se e solo se $\Phi_{\pi} \in \mathbb{T}$.
 ### Esempi
 - Definire se $n$ è pari: $\Phi_{PARI}(n) = 1 \dot- (n\ mod\ 2)$  
 - Equazione diofantea: $\Phi_{ED}(a, b, c) = 1 \dot-(c\ mod\ mcd(a, b))$  
+
 Problemi sui grafi:  
 - l'esistenza di un cammino tra due nodi, problema di raggiungibilità, viene risolto con algoritmi di visita oppure sapendo che, data la matrice di adiacenza $M_G$ del grafo $G$, $(M_G^k)_{ij} = 1$ se e solo esiste un cammino di lunghezza $k$ tra il nodo $i$ e il nodo $j$;
 - l'esistenza di un circuito hamiltoniano è un problema $NP\text{-completo}$ con complessità fattoriale nel numero dei nodi, in quanto consiste nel provare tutte le permutazioni dei nodi e controllare se è un circuito valido (rimane comunque decidibile);
@@ -635,7 +636,7 @@ Ma entrambi i risultati portano a degli assurdi: è 0 se è indefinita, ma non p
 $A \subseteq \mathbb{N}$ è un _insieme ricorsivo_ se e solo se esiste un programma $P_a$ che si arresta su ogni input classificando correttamente gli elementi in base alla loro appartenza o meno ad $A$.  
 Equivalentemente definiamo una funzione caratteristica $\chi_a: \mathbb{N} \to \{0, 1\}$ tale che $\chi_a(x) = 1$ se $x \in A$, 0 altrimenti. $A$ è ricorsivo se $\chi_a \in \mathbb{T}$.  
 Le due definizioni sono equivalenti: se $P_a$ implementa $\chi_a$ significa che $\chi_a$ è totale, e se $\chi_a$ è totale significa che esiste un programma $P_a$ che la implementa.  
-Con abuso di notazione possiamo dire che un insieme ricorsivo è decidibile perché ad ogni insieme possiamo associare un corrispondente problema di riconoscimento: infatti la funzione riconoscimento che restituisce 1 se un elemento appartiene all'insieme e 0 in caso contrario è coincide con $\chi_a$ ed è quindi totale.  
+Con abuso di linguaggio possiamo dire che un insieme ricorsivo è decidibile perché ad ogni insieme possiamo associare un corrispondente problema di riconoscimento: infatti la funzione riconoscimento che restituisce 1 se un elemento appartiene all'insieme e 0 in caso contrario coincide con $\chi_a$ ed è quindi totale.  
 Analogamente se un problema $\pi$ è decidibile allora $\Phi_{\pi} \in \mathbb{T}$ e quindi un programma che calcola $\Phi_{\pi}$ riconosce automaticamente l'insieme $A_{\pi} \implies A_{\pi}$ è ricorsivo.  
 
 ## Insiemi non ricorsivi
